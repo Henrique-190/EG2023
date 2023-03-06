@@ -1,0 +1,140 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> start
+Rule 1     start -> MAIS intervalos
+Rule 2     start -> MENOS intervalos
+Rule 3     intervalos -> intervalo
+Rule 4     intervalos -> intervalo intervalos
+Rule 5     intervalo -> [ NUMERO , NUMERO ]
+
+Terminals, with rules where they appear
+
+,                    : 5
+MAIS                 : 1
+MENOS                : 2
+NUMERO               : 5 5
+[                    : 5
+]                    : 5
+error                : 
+
+Nonterminals, with rules where they appear
+
+intervalo            : 3 4
+intervalos           : 1 2 4
+start                : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . start
+    (1) start -> . MAIS intervalos
+    (2) start -> . MENOS intervalos
+
+    MAIS            shift and go to state 2
+    MENOS           shift and go to state 3
+
+    start                          shift and go to state 1
+
+state 1
+
+    (0) S' -> start .
+
+
+
+state 2
+
+    (1) start -> MAIS . intervalos
+    (3) intervalos -> . intervalo
+    (4) intervalos -> . intervalo intervalos
+    (5) intervalo -> . [ NUMERO , NUMERO ]
+
+    [               shift and go to state 6
+
+    intervalos                     shift and go to state 4
+    intervalo                      shift and go to state 5
+
+state 3
+
+    (2) start -> MENOS . intervalos
+    (3) intervalos -> . intervalo
+    (4) intervalos -> . intervalo intervalos
+    (5) intervalo -> . [ NUMERO , NUMERO ]
+
+    [               shift and go to state 6
+
+    intervalos                     shift and go to state 7
+    intervalo                      shift and go to state 5
+
+state 4
+
+    (1) start -> MAIS intervalos .
+
+    $end            reduce using rule 1 (start -> MAIS intervalos .)
+
+
+state 5
+
+    (3) intervalos -> intervalo .
+    (4) intervalos -> intervalo . intervalos
+    (3) intervalos -> . intervalo
+    (4) intervalos -> . intervalo intervalos
+    (5) intervalo -> . [ NUMERO , NUMERO ]
+
+    $end            reduce using rule 3 (intervalos -> intervalo .)
+    [               shift and go to state 6
+
+    intervalo                      shift and go to state 5
+    intervalos                     shift and go to state 8
+
+state 6
+
+    (5) intervalo -> [ . NUMERO , NUMERO ]
+
+    NUMERO          shift and go to state 9
+
+
+state 7
+
+    (2) start -> MENOS intervalos .
+
+    $end            reduce using rule 2 (start -> MENOS intervalos .)
+
+
+state 8
+
+    (4) intervalos -> intervalo intervalos .
+
+    $end            reduce using rule 4 (intervalos -> intervalo intervalos .)
+
+
+state 9
+
+    (5) intervalo -> [ NUMERO . , NUMERO ]
+
+    ,               shift and go to state 10
+
+
+state 10
+
+    (5) intervalo -> [ NUMERO , . NUMERO ]
+
+    NUMERO          shift and go to state 11
+
+
+state 11
+
+    (5) intervalo -> [ NUMERO , NUMERO . ]
+
+    ]               shift and go to state 12
+
+
+state 12
+
+    (5) intervalo -> [ NUMERO , NUMERO ] .
+
+    [               reduce using rule 5 (intervalo -> [ NUMERO , NUMERO ] .)
+    $end            reduce using rule 5 (intervalo -> [ NUMERO , NUMERO ] .)
+
